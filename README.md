@@ -2,7 +2,7 @@
 
 Steps to run this project:
 
-1. Clone repo from .......
+1. Clone repo 
 2. Setup postgres on your local machine and make sure its active
 3. Run `npm i` command to install all the necessary packages
 4. Setup database settings inside `ormconfig.json` file with the database params that match your config.
