@@ -9,3 +9,4 @@ Steps to run this project:
 5. run migration with `npm run typeorm migration:run` command
 6. Run `npm start` command or `npm run dev` command to keep track of changes real time.
 7. Once the app starts you can view the route http://localhost:port in the console, this is the route your endpionts would be defined on and the front end will connect to.
+8. to ensure the communication between the backend and frontend make sure the frontend code is setup as well. go to https://github.com/peacemakafui/xd2sketch-coding-fe.git to see the frontend instructions
