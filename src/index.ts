@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { File } from "./entity/File";
-// import { validate } from "class-validator";
+import { validate } from "class-validator";
 import express, { Request, Response } from "express";
 import cors from "cors";
 
@@ -18,6 +18,11 @@ app.post("/file-infos", async (req: Request, res: Response) => {
       lastmodified,
       filetype,
     });
+    const errors = await validate(fileInfo);
+    if (errors.length > 0) {
+      console.log(errors);
+      return res.status(500).json(errors);
+    }
 
     await fileInfo.save();
     return res.status(201).json(fileInfo);

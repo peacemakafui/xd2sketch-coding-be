@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
 } from "typeorm";
+import { IsDefined } from "class-validator";
 
 import { v4 as uuid } from "uuid";
 @Entity("filedata")
@@ -15,15 +16,19 @@ export class File extends BaseEntity {
   id: number;
 
   @Column()
+  @IsDefined()
   filename: string;
 
   @Column({ type: "bigint" })
+  @IsDefined()
   filesize: number;
 
   @Column()
+  @IsDefined()
   filetype: string;
 
   @Column({ type: "bigint" })
+  @IsDefined()
   lastmodified: number;
 
   @Column({ type: "uuid" })
