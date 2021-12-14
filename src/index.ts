@@ -1,15 +1,17 @@
-import "reflect-metadata";
-import { createConnection } from "typeorm";
-import { File } from "./entity/File";
-import { validate } from "class-validator";
-import express, { Request, Response } from "express";
-import cors from "cors";
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import { File } from './entity/File';
+import { validate } from 'class-validator';
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import { config } from 'dotenv';
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-//Create file meta data;
-app.post("/file-infos", async (req: Request, res: Response) => {
+
+//Storing file meta data;
+app.post('/file-infos', async (req: Request, res: Response) => {
   const { filename, filesize, lastmodified, filetype } = req.body;
   try {
     const fileInfo = File.create({
@@ -25,40 +27,48 @@ app.post("/file-infos", async (req: Request, res: Response) => {
     }
 
     await fileInfo.save();
-    return res.status(201).json(fileInfo);
+    return res.status(201).json({ message: 'File created successfully' });
   } catch (err) {
     console.log(err);
-    return res.status(500).json(err);
+    return res.status(500).json({ error: 'Could not store file', err });
   }
 });
-//getting all the data back
-app.get("/file-infos", async (_: Request, res: Response) => {
+
+//Fetching file meta data
+app.get('/file-infos', async (_: Request, res: Response) => {
   try {
     const fileInfos = await File.find();
 
     return res.status(200).json(fileInfos);
   } catch (err) {
     console.log(err);
-    return res.status(500).json(err);
+    return res
+      .status(500)
+      .json({ error: 'Could not retrieve requested files', err });
   }
 });
 
-//deleting fileINfo
-app.delete("/file-infos/:uuid", async (req: Request, res: Response) => {
+//Deleting file meta data
+app.delete('/file-infos/:uuid', async (req: Request, res: Response) => {
   const uuid = req.params.uuid;
 
   try {
     const fileInfo = await File.findOneOrFail({ uuid });
     await fileInfo.remove();
 
-    return res.status(204).json({ message: "file deleted" });
+    return res.status(204).json({ message: 'File deleted' });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: "Something went wrong" });
+    return res.status(500).json({ error: 'Could not delete file', err });
   }
 });
+
 createConnection()
   .then(async () => {
-    app.listen(5000, () => console.log("server up at http://localhost:5000"));
+    app.listen(process.env.PORT, () =>
+      console.log(
+        `server up at http://${process.env.DB_HOST}:${process.env.PORT}`,
+      ),
+    );
   })
   .catch((error) => console.log(error));
