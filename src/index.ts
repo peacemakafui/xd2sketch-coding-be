@@ -59,7 +59,7 @@ app.delete('/file-infos/:uuid', async (req: Request, res: Response) => {
     return res.status(204).json({ message: 'File deleted' });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'Could not delete file', err });
+    return res.status(500).json({ error: 'Could not delete file ', err });
   }
 });
 
